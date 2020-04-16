@@ -1,0 +1,7 @@
+version: '3'
+services:
+  english-booster:
+    build: .
+    image: english-booster:latest
+    ports:
+      - 4888:80
