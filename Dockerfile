@@ -3,16 +3,16 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["english-booster.csproj", ""]
-RUN dotnet restore "./english-booster.csproj"
+COPY ["EnglishBooster.csproj", ""]
+RUN dotnet restore "./EnglishBooster.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "english-booster.csproj" -c Release -o /app/build
+RUN dotnet build "EnglishBooster.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "english-booster.csproj" -c Release -o /app/publish
+RUN dotnet publish "EnglishBooster.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "english-booster.dll"]
+ENTRYPOINT ["dotnet", "EnglishBooster.dll"]

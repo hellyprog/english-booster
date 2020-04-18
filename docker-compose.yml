@@ -2,6 +2,6 @@ version: '3'
 services:
   english-booster:
     build: .
-    image: english-booster:latest
+    image: devdockerid/english-booster
     ports:
       - 4888:80
