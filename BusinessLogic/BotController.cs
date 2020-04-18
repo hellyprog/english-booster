@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types.Enums;
 
-namespace EnglishBooster
+namespace EnglishBooster.BusinessLogic
 {
 	public class BotController
 	{
@@ -22,6 +24,14 @@ namespace EnglishBooster
 			botClient.OnInlineQuery += BotOnInlineQueryReceived;
 			botClient.OnInlineResultChosen += BotOnChosenInlineResultReceived;
 			botClient.OnReceiveError += BotOnReceiveError;
+		}
+
+		public async Task StartReceiving(CancellationToken cancellationToken = default)
+		{
+			botClient.StartReceiving(cancellationToken: cancellationToken);
+
+			var me = await botClient.GetMeAsync();
+			Console.WriteLine($"{me.Username} is ready");
 		}
 
 		private void BotOnReceiveError(object sender, ReceiveErrorEventArgs e)
@@ -44,17 +54,23 @@ namespace EnglishBooster
 			throw new NotImplementedException();
 		}
 
-		private void BotOnMessageReceived(object sender, MessageEventArgs e)
+		private async void BotOnMessageReceived(object sender, MessageEventArgs e)
 		{
-			throw new NotImplementedException();
-		}
+			if (e.Message == null || e.Message.Type != MessageType.Text)
+				return;
 
-		public async Task StartReceiving(CancellationToken cancellationToken = default)
-		{
-			botClient.StartReceiving(cancellationToken: cancellationToken);
+			Console.WriteLine(
+				$"{e.Message.Chat.Title ?? e.Message.Chat.FirstName + " " + e.Message.Chat.LastName}({e.Message.From}) sent message"
+			);
 
-			var me = await botClient.GetMeAsync();
-			Console.WriteLine($"{me.Username} is ready");
+			var commandName = e.Message.Text.Split(' ').First();
+			var commandFactory = new CommandFactory(botClient, e);
+			var command = commandFactory.GetCommand(commandName);
+			
+			if (command != null)
+			{
+				await command.ExecuteAsync(); 
+			}
 		}
 	}
 }

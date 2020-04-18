@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EnglishBooster.BusinessLogic;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
