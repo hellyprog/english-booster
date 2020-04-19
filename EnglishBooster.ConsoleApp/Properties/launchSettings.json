@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "english-booster": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

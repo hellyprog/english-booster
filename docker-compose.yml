@@ -1,7 +1,7 @@
 version: '3'
 services:
   english-booster:
-    build: .
+    build: ./EnglishBooster.API
     image: devdockerid/english-booster
     ports:
-      - 4888:80
+      - 8443:80
