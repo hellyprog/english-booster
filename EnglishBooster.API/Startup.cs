@@ -26,6 +26,7 @@ namespace EnglishBooster.API
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddMvc();
 			services.AddControllers().AddNewtonsoftJson();
 			services.AddTransient<ITelegramBotClient, TelegramBotClient>(s =>
 			{
@@ -51,6 +52,8 @@ namespace EnglishBooster.API
 			{
 				endpoints.MapControllers();
 			});
+
+
 		}
 	}
 }

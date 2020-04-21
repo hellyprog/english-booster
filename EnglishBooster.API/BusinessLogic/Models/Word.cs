@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EnglishBooster.BusinessLogic.Models
+namespace EnglishBooster.API.BusinessLogic.Models
 {
 	public class Word
 	{

@@ -1,24 +1,22 @@
-﻿using EnglishBooster.BusinessLogic.Models;
+﻿using EnglishBooster.API.BusinessLogic.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace EnglishBooster.BusinessLogic.Commands
+namespace EnglishBooster.API.BusinessLogic.Commands
 {
 	public class NewWordCommand : ICommand
 	{
 		private readonly ITelegramBotClient telegramBotClient;
-		private readonly MessageEventArgs messageEventArgs;
+		private readonly Message message;
 
-		public NewWordCommand(ITelegramBotClient telegramBotClient, MessageEventArgs messageEventArgs)
+		public NewWordCommand(ITelegramBotClient telegramBotClient, Message message)
 		{
 			this.telegramBotClient = telegramBotClient;
-			this.messageEventArgs = messageEventArgs;
+			this.message = message;
 		}
 
 		public async Task ExecuteAsync()
@@ -30,10 +28,10 @@ namespace EnglishBooster.BusinessLogic.Commands
 				Value = "Let's go"
 			};
 
-			await telegramBotClient.SendChatActionAsync(messageEventArgs.Message.Chat.Id, ChatAction.Typing);
+			await telegramBotClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
 
 			await telegramBotClient.SendTextMessageAsync(
-					chatId: messageEventArgs.Message.Chat.Id,
+					chatId: message.Chat.Id,
 					text: FormatNewWordText(word),
 					parseMode: ParseMode.Markdown
 				);

@@ -1,8 +1,7 @@
-﻿using EnglishBooster.BusinessLogic.Models;
-using EnglishBooster.Extensions;
+﻿using EnglishBooster.API.BusinessLogic.Models;
+using EnglishBooster.API.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -10,17 +9,17 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace EnglishBooster.BusinessLogic.Commands
+namespace EnglishBooster.API.BusinessLogic.Commands
 {
 	public class RecallCommand : ICommand
 	{
 		private readonly ITelegramBotClient telegramBotClient;
-		private readonly MessageEventArgs messageEventArgs;
+		private readonly Message message;
 
-		public RecallCommand(ITelegramBotClient telegramBotClient, MessageEventArgs messageEventArgs)
+		public RecallCommand(ITelegramBotClient telegramBotClient, Message message)
 		{
 			this.telegramBotClient = telegramBotClient;
-			this.messageEventArgs = messageEventArgs;
+			this.message = message;
 		}
 
 		public async Task ExecuteAsync()
@@ -37,12 +36,12 @@ namespace EnglishBooster.BusinessLogic.Commands
 				}
 			};
 
-			await telegramBotClient.SendChatActionAsync(messageEventArgs.Message.Chat.Id, ChatAction.Typing);
+			await telegramBotClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
 
 			(var text, var inlineKeyboard) = GenerateRecallData(word);
 
 			await telegramBotClient.SendTextMessageAsync(
-				chatId: messageEventArgs.Message.Chat.Id,
+				chatId: message.Chat.Id,
 				text,
 				parseMode: ParseMode.Markdown,
 				replyMarkup: inlineKeyboard

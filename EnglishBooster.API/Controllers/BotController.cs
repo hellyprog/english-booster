@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EnglishBooster.API.BusinessLogic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot;
@@ -21,12 +22,6 @@ namespace EnglishBooster.API.Controllers
             this.telegramBotClient = telegramBotClient;
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(5);
-        }
-
         [HttpPost]
         public async Task Post([FromBody]Update update)
         {
@@ -35,11 +30,16 @@ namespace EnglishBooster.API.Controllers
                 return;
             }
 
-            var message = update.Message;
-
-            if (message?.Type == MessageType.Text)
+            if(update.Type == UpdateType.Message)
             {
-                await telegramBotClient.SendTextMessageAsync(message.Chat.Id, message.Text);
+                var factory = new CommandFactory(telegramBotClient, update);
+                var commandName = update.Message.Text.Split(' ').First();
+                var command = factory.GetCommand(commandName);
+
+                if (command != null)
+                {
+                    await command.ExecuteAsync();
+                }
             }
         }
     }

@@ -4,4 +4,5 @@ services:
     build: ./EnglishBooster.API
     image: devdockerid/english-booster
     ports:
-      - 8443:80
+      - 8090:80
+      - 8443:443

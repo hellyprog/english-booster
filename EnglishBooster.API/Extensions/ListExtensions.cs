@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EnglishBooster.Extensions
+namespace EnglishBooster.API.Extensions
 {
 	public static class ListExtensions
 	{
