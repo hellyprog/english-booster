@@ -30,16 +30,13 @@ namespace EnglishBooster.API.Controllers
                 return;
             }
 
-            if(update.Type == UpdateType.Message)
-            {
-                var factory = new CommandFactory(telegramBotClient, update);
-                var commandName = update.Message.Text.Split(' ').First();
-                var command = factory.GetCommand(commandName);
+            var decider = new FactoryDecider();
+            var commandFactory = decider.GetFactory(telegramBotClient, update);
+            var command = commandFactory.GetCommand();
 
-                if (command != null)
-                {
-                    await command.ExecuteAsync();
-                }
+            if (command != null)
+            {
+                await command.ExecuteAsync();
             }
         }
     }
