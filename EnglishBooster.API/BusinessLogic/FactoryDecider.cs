@@ -17,6 +17,7 @@ namespace EnglishBooster.API.BusinessLogic
 			return update.Type switch
 			{
 				UpdateType.Message => new MessageCommandFactory(telegramBotClient, update),
+				UpdateType.CallbackQuery => new CallbackQueryCommandFactory(telegramBotClient, update),
 				_ => null
 			};
 		}
