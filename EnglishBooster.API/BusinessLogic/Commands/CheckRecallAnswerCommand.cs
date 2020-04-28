@@ -20,10 +20,13 @@ namespace EnglishBooster.API.BusinessLogic.Commands
 
 		public async Task ExecuteAsync()
 		{
-			await telegramBotClient.SendTextMessageAsync(
-					callbackQuery.Message.Chat.Id,
-					"Callback query"
-				);
+			var replyTo = $"{callbackQuery.From.FirstName} {callbackQuery.From.LastName}";
+			var isCorrectAnswer = bool.Parse(callbackQuery.Data);
+
+			await telegramBotClient.AnswerCallbackQueryAsync(
+				callbackQueryId: callbackQuery.Id,
+				text: $"{replyTo} - {(isCorrectAnswer ? "You're right" : "Try again")}"
+			);
 		}
 	}
 }
