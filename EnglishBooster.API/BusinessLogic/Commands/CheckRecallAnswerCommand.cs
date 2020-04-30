@@ -25,6 +25,11 @@ namespace EnglishBooster.API.BusinessLogic.Commands
 
 			await telegramBotClient.AnswerCallbackQueryAsync(
 				callbackQueryId: callbackQuery.Id,
+				text: isCorrectAnswer ? "You're right" : "Try again"
+			);
+
+			await telegramBotClient.SendTextMessageAsync(
+				chatId: callbackQuery.Message.Chat.Id,
 				text: $"{replyTo} - {(isCorrectAnswer ? "You're right" : "Try again")}"
 			);
 		}

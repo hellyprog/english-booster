@@ -66,7 +66,7 @@ namespace EnglishBooster.API.BusinessLogic.Commands
 			{
 				yield return new[]
 				{
-					InlineKeyboardButton.WithCallbackData(item, (word.Value == item).ToString())
+					InlineKeyboardButton.WithCallbackData(item, (word.Meaning == item).ToString())
 				};
 			}
 		}
