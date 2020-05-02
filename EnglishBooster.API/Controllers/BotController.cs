@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EnglishBooster.API.BusinessLogic;
+using EnglishBooster.API.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot;
@@ -16,10 +17,12 @@ namespace EnglishBooster.API.Controllers
     public class BotController : ControllerBase
     {
         private readonly ITelegramBotClient telegramBotClient;
+        private readonly ICommandFactory commandFactory;
 
-        public BotController(ITelegramBotClient telegramBotClient)
+        public BotController(ITelegramBotClient telegramBotClient, ICommandFactory commandFactory)
         {
             this.telegramBotClient = telegramBotClient;
+            this.commandFactory = commandFactory;
         }
 
         [HttpPost]
@@ -30,9 +33,7 @@ namespace EnglishBooster.API.Controllers
                 return;
             }
 
-            var decider = new FactoryDecider();
-            var commandFactory = decider.GetFactory(telegramBotClient, update);
-            var command = commandFactory.GetCommand();
+            var command = commandFactory.GetCommand(update);
 
             if (command != null)
             {

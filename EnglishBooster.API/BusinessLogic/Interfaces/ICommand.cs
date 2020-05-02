@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EnglishBooster.API.BusinessLogic.Commands
+namespace EnglishBooster.API.BusinessLogic.Interfaces
 {
 	public interface ICommand
 	{

@@ -1,28 +1,46 @@
-﻿using EnglishBooster.API.BusinessLogic.Models;
+﻿using EnglishBooster.API.BusinessLogic.Interfaces;
+using EnglishBooster.API.BusinessLogic.Models;
+using EnglishBooster.API.DbAccess;
 using EnglishBooster.API.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace EnglishBooster.API.BusinessLogic.Commands
+namespace EnglishBooster.API.BusinessLogic.Services
 {
-	public class RecallCommand : ICommand
+	public class MessageService : IMessageService
 	{
-		private readonly ITelegramBotClient telegramBotClient;
-		private readonly Message message;
+		private readonly IWordRepository wordRepository;
 
-		public RecallCommand(ITelegramBotClient telegramBotClient, Message message)
+		public MessageService(IWordRepository wordRepository)
 		{
-			this.telegramBotClient = telegramBotClient;
-			this.message = message;
+			this.wordRepository = wordRepository;
 		}
 
-		public async Task ExecuteAsync()
+		public async Task SendNewWord(ITelegramBotClient telegramBotClient, Message message)
+		{
+			var word = new Word
+			{
+				IsNew = true,
+				Meaning = "(англ.) Погнали",
+				Value = "Let's go"
+			};
+
+			await telegramBotClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+
+			await telegramBotClient.SendTextMessageAsync(
+				chatId: message.Chat.Id,
+				text: FormatNewWordText(word),
+				parseMode: ParseMode.Markdown
+			);
+		}
+
+		public async Task SendWordForRecall(ITelegramBotClient telegramBotClient, Message message)
 		{
 			var word = new Word
 			{
@@ -46,6 +64,11 @@ namespace EnglishBooster.API.BusinessLogic.Commands
 				parseMode: ParseMode.Markdown,
 				replyMarkup: inlineKeyboard
 			);
+		}
+
+		private string FormatNewWordText(Word word)
+		{
+			return $"*{word.Value}*{Environment.NewLine}{word.Meaning}";
 		}
 
 		private (string, InlineKeyboardMarkup) GenerateRecallData(Word word)

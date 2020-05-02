@@ -12,6 +12,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Newtonsoft.Json;
+using EnglishBooster.API.DbAccess;
+using EnglishBooster.API.BusinessLogic.Interfaces;
+using EnglishBooster.API.BusinessLogic;
+using EnglishBooster.API.BusinessLogic.Services;
 
 namespace EnglishBooster.API
 {
@@ -28,11 +32,21 @@ namespace EnglishBooster.API
 		{
 			services.AddMvc();
 			services.AddControllers().AddNewtonsoftJson();
+			
 			services.AddTransient<ITelegramBotClient, TelegramBotClient>(s =>
 			{
 				var token = Configuration["BotToken"];
 				return new TelegramBotClient(token);
 			});
+
+			services.AddTransient<IWordRepository, WordRepository>(c =>
+			{
+				var connectionString = Configuration.GetConnectionString("MongoDbConnection");
+				return new WordRepository(connectionString);
+			});
+
+			services.AddTransient<ICommandFactory, CommandFactory>();
+			services.AddTransient<IMessageService, MessageService>();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
