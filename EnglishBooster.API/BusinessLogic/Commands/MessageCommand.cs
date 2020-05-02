@@ -12,9 +12,9 @@ namespace EnglishBooster.API.BusinessLogic.Commands
 	{
 		private readonly ITelegramBotClient telegramBotClient;
 		private readonly Message message;
-		private readonly IMessageService messageService;
+		private readonly IWordService messageService;
 
-		public MessageCommand(ITelegramBotClient telegramBotClient, Message message, IMessageService messageService)
+		public MessageCommand(ITelegramBotClient telegramBotClient, Message message, IWordService messageService)
 		{
 			this.telegramBotClient = telegramBotClient;
 			this.message = message;

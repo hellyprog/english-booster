@@ -13,11 +13,11 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace EnglishBooster.API.BusinessLogic.Services
 {
-	public class MessageService : IMessageService
+	public class WordService : IWordService
 	{
 		private readonly IWordRepository wordRepository;
 
-		public MessageService(IWordRepository wordRepository)
+		public WordService(IWordRepository wordRepository)
 		{
 			this.wordRepository = wordRepository;
 		}

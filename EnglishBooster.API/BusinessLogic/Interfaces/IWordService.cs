@@ -7,7 +7,7 @@ using Telegram.Bot.Types;
 
 namespace EnglishBooster.API.BusinessLogic.Interfaces
 {
-	public interface IMessageService
+	public interface IWordService
 	{
 		Task SendNewWord(ITelegramBotClient telegramBotClient, Message message);
 		Task SendWordForRecall(ITelegramBotClient telegramBotClient, Message message);

@@ -46,7 +46,7 @@ namespace EnglishBooster.API
 			});
 
 			services.AddTransient<ICommandFactory, CommandFactory>();
-			services.AddTransient<IMessageService, MessageService>();
+			services.AddTransient<IWordService, WordService>();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

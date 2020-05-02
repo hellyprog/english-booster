@@ -13,9 +13,9 @@ namespace EnglishBooster.API.BusinessLogic
 	public class CommandFactory : ICommandFactory
 	{
 		private readonly ITelegramBotClient telegramBotClient;
-		private readonly IMessageService messageService;
+		private readonly IWordService messageService;
 
-		public CommandFactory(ITelegramBotClient telegramBotClient, IMessageService messageService)
+		public CommandFactory(ITelegramBotClient telegramBotClient, IWordService messageService)
 		{
 			this.telegramBotClient = telegramBotClient;
 			this.messageService = messageService;
