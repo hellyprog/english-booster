@@ -16,6 +16,7 @@ using EnglishBooster.API.DbAccess;
 using EnglishBooster.API.BusinessLogic.Interfaces;
 using EnglishBooster.API.BusinessLogic;
 using EnglishBooster.API.BusinessLogic.Services;
+using EnglishBooster.API.DbAccess.Mappings;
 
 namespace EnglishBooster.API
 {
@@ -41,12 +42,20 @@ namespace EnglishBooster.API
 
 			services.AddTransient<IWordRepository, WordRepository>(c =>
 			{
-				var connectionString = Configuration.GetConnectionString("MongoDbConnection");
-				return new WordRepository(connectionString);
+				var connectionString = Configuration["DatabaseSettings:ConnectionString"];
+				var dbName = Configuration["DatabaseSettings:DatabaseName"];
+				return new WordRepository(connectionString, dbName);
 			});
 
 			services.AddTransient<ICommandFactory, CommandFactory>();
 			services.AddTransient<IWordService, WordService>();
+
+			ConfigureMapping();
+		}
+
+		public void ConfigureMapping()
+		{
+			WordMapping.Register();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -56,7 +65,7 @@ namespace EnglishBooster.API
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
 			app.UseRouting();
 

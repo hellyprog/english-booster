@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EnglishBooster.API.Extensions
 {
 	public static class ListExtensions
 	{
-        private static readonly Random random = new Random();
-
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
+            var random = new Random();
             int n = list.Count;
             
             while (n > 1)
@@ -22,6 +22,13 @@ namespace EnglishBooster.API.Extensions
             }
 
             return list;
+        }
+
+        public static T GetRandomElement<T>(this IList<T> list)
+        {
+            var random = new Random(DateTime.Now.Millisecond);
+
+            return list.ElementAt(random.Next(list.Count()));
         }
     }
 }

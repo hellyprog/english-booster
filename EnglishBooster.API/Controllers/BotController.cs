@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using EnglishBooster.API.BusinessLogic;
 using EnglishBooster.API.BusinessLogic.Interfaces;
+using EnglishBooster.API.BusinessLogic.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -16,12 +19,10 @@ namespace EnglishBooster.API.Controllers
     [ApiController]
     public class BotController : ControllerBase
     {
-        private readonly ITelegramBotClient telegramBotClient;
         private readonly ICommandFactory commandFactory;
 
-        public BotController(ITelegramBotClient telegramBotClient, ICommandFactory commandFactory)
+        public BotController(ICommandFactory commandFactory)
         {
-            this.telegramBotClient = telegramBotClient;
             this.commandFactory = commandFactory;
         }
 

@@ -9,7 +9,7 @@ namespace EnglishBooster.API.BusinessLogic.Interfaces
 {
 	public interface IWordService
 	{
-		Task SendNewWord(ITelegramBotClient telegramBotClient, Message message);
-		Task SendWordForRecall(ITelegramBotClient telegramBotClient, Message message);
+		Task SendNewWordAsync(ITelegramBotClient telegramBotClient, Message message);
+		Task SendWordForRecallAsync(ITelegramBotClient telegramBotClient, Message message);
 	}
 }

@@ -27,8 +27,8 @@ namespace EnglishBooster.API.BusinessLogic.Commands
 
 			return commandName switch
 			{
-				"/new_word" => messageService.SendNewWord(telegramBotClient, message),
-				"/recall" => messageService.SendWordForRecall(telegramBotClient, message),
+				"/new_word" => messageService.SendNewWordAsync(telegramBotClient, message),
+				"/recall" => messageService.SendWordForRecallAsync(telegramBotClient, message),
 				_ => null,
 			};
 		}

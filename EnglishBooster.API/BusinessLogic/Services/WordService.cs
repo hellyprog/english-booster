@@ -22,14 +22,10 @@ namespace EnglishBooster.API.BusinessLogic.Services
 			this.wordRepository = wordRepository;
 		}
 
-		public async Task SendNewWord(ITelegramBotClient telegramBotClient, Message message)
+		public async Task SendNewWordAsync(ITelegramBotClient telegramBotClient, Message message)
 		{
-			var word = new Word
-			{
-				IsNew = true,
-				Meaning = "(англ.) Погнали",
-				Value = "Let's go"
-			};
+			var words = (await wordRepository.GetWordsAsync()).Where(x => x.IsNew).ToList();
+			var word = words.GetRandomElement();
 
 			await telegramBotClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
 
@@ -40,7 +36,7 @@ namespace EnglishBooster.API.BusinessLogic.Services
 			);
 		}
 
-		public async Task SendWordForRecall(ITelegramBotClient telegramBotClient, Message message)
+		public async Task SendWordForRecallAsync(ITelegramBotClient telegramBotClient, Message message)
 		{
 			var word = new Word
 			{
