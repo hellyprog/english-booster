@@ -24,8 +24,8 @@ namespace EnglishBooster.API.BusinessLogic.Services
 
 		public async Task SendNewWordAsync(ITelegramBotClient telegramBotClient, Message message)
 		{
-			var words = (await wordRepository.GetWordsAsync()).Where(x => x.IsNew).ToList();
-			var word = words.GetRandomElement();
+			var words = await wordRepository.GetWordsAsync();
+			var word = words.ToList().GetRandomElement();
 
 			await telegramBotClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
 
@@ -40,8 +40,7 @@ namespace EnglishBooster.API.BusinessLogic.Services
 		{
 			var word = new Word
 			{
-				IsNew = true,
-				Meaning = "(англ.) Погнали",
+				Meanings = new List<string> { "(англ.) Погнали" },
 				Value = "Let's go",
 				RecallValues = new List<string>
 				{
@@ -64,7 +63,7 @@ namespace EnglishBooster.API.BusinessLogic.Services
 
 		private string FormatNewWordText(Word word)
 		{
-			return $"*{word.Value}*{Environment.NewLine}{word.Meaning}";
+			return $"*{word.Value}*{Environment.NewLine}{word.Meanings.ToTelegramMessageFormat()}";
 		}
 
 		private (string, InlineKeyboardMarkup) GenerateRecallData(Word word)
@@ -78,14 +77,14 @@ namespace EnglishBooster.API.BusinessLogic.Services
 
 		private IEnumerable<IEnumerable<InlineKeyboardButton>> GenerateInlineKeyboardButtons(Word word)
 		{
-			word.RecallValues.Add(word.Meaning);
+			word.RecallValues.Add(word.Meanings.ToTelegramMessageFormat());
 			var words = word.RecallValues.Shuffle();
 
 			foreach (var item in words)
 			{
 				yield return new[]
 				{
-					InlineKeyboardButton.WithCallbackData(item, (word.Meaning == item).ToString())
+					InlineKeyboardButton.WithCallbackData(item, (word.Meanings.ToTelegramMessageFormat() == item).ToString())
 				};
 			}
 		}

@@ -30,5 +30,17 @@ namespace EnglishBooster.API.Extensions
 
             return list.ElementAt(random.Next(list.Count()));
         }
+
+        public static string ToTelegramMessageFormat(this List<string> list)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var item in list)
+            {
+                sb.AppendLine(item);
+            }
+
+            return sb.ToString();
+        }
     }
 }
